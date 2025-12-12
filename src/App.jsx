@@ -12,6 +12,7 @@ import {
 import HabitGrid from './components/HabitGrid';
 import Analytics from './components/Analytics';
 import LockScreen from './components/LockScreen';
+import AddHabitModal from './components/AddHabitModal';
 
 function App() {
   const [habits, setHabits] = useState([]);
