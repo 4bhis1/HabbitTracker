@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Unlock, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Lock, Unlock, ArrowRight, ShieldCheck, Info, X, LayoutGrid } from 'lucide-react';
 
 export default function LockScreen({ onUnlock }) {
     const [password, setPassword] = useState('');
     const [storedPassword, setStoredPassword] = useState(null);
     const [error, setError] = useState(false);
+
+    const [showInfo, setShowInfo] = useState(false);
 
     useEffect(() => {
         const saved = localStorage.getItem('habit_tracker_password');
@@ -35,7 +37,14 @@ export default function LockScreen({ onUnlock }) {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8 text-center animate-in fade-in zoom-in duration-300">
+            <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8 text-center animate-in fade-in zoom-in duration-300 relative">
+                <button
+                    onClick={() => setShowInfo(true)}
+                    className="absolute top-4 right-4 text-gray-400 hover:text-[#16a34a] transition-colors"
+                >
+                    <Info size={20} />
+                </button>
+
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     {storedPassword ? (
                         <Lock className="text-green-600" size={32} />
@@ -95,6 +104,41 @@ export default function LockScreen({ onUnlock }) {
                     Passcode is stored locally in your browser.
                 </p>
             </div>
+
+            {/* Info Modal */}
+            {showInfo && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative animate-in fade-in zoom-in duration-200">
+                        <button
+                            onClick={() => setShowInfo(false)}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                        >
+                            <X size={20} />
+                        </button>
+
+                        <div className="text-center mb-6">
+                            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                <LayoutGrid className="text-green-600" size={24} />
+                            </div>
+                            <h2 className="text-xl font-bold font-display text-gray-900">About Level Up</h2>
+                        </div>
+
+                        <div className="space-y-4 text-left text-gray-600 text-sm">
+                            <p>
+                                <strong className="text-gray-900">Level Up</strong> is a minimalist, gamified habit tracker designed to help you stay consistent with your daily goals.
+                            </p>
+                            <ul className="list-disc pl-5 space-y-1">
+                                <li><strong>Privacy First:</strong> Your data and password are stored 100% locally on your device. Nothing is sent to the cloud.</li>
+                                <li><strong>Visual Progress:</strong> Track your streaks with a spreadsheet-style view and beautiful analytics.</li>
+                                <li><strong>Secure:</strong> A simple lock screen keeps your personal growth journey private.</li>
+                            </ul>
+                            <p className="pt-2 italic text-xs text-center border-t border-gray-100 mt-4">
+                                "Success is the sum of small efforts, repeated day in and day out."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
