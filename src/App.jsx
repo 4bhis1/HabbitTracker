@@ -11,13 +11,14 @@ import {
 } from './lib/db';
 import HabitGrid from './components/HabitGrid';
 import Analytics from './components/Analytics';
-import AddHabitModal from './components/AddHabitModal';
+import LockScreen from './components/LockScreen';
 
 function App() {
   const [habits, setHabits] = useState([]);
   const [logs, setLogs] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isLocked, setIsLocked] = useState(true);
 
   const refreshData = async () => {
     await cleanupOldLogs();
@@ -63,10 +64,14 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-[var(--primary-color)] font-display tracking-widest animate-pulse">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-[#16a34a] font-display tracking-widest animate-pulse">
         LOADING SYSTEM...
       </div>
     );
+  }
+
+  if (isLocked) {
+    return <LockScreen onUnlock={() => setIsLocked(false)} />;
   }
 
   return (
